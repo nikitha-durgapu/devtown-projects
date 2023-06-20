@@ -115,7 +115,7 @@ const reportCard = ({
                                 fill="#fff"></path>
                         </g>
                     </svg>
-                    <h4 class="text-slate-50 font-semibold text-base mx-1">${citywindspeed}</h4>
+                    <h4 class="text-slate-50 font-semibold text-base mx-1">${citywindspeed}m/s</h4>
                 </div>
                 <div class="flex flex-row justify-start items-center">
                     <svg fill="#f9fafb" height="200px" width="200px" version="1.1" id="Icons"
@@ -170,52 +170,52 @@ const generateReport = async () => {
       .then((datadisplay) => {
         let deg = datadisplay.wind.deg
         switch (true) {
-            case deg >= 0 && deg <= 21:
+            case (deg >=348.76  && deg <= 360)||(deg >=0  && deg <= 11.25):
               deg = "N";
               break;
-            case deg >= 22 && deg <= 44:
+            case deg >= 11.26 && deg <= 33.75:
               deg = "NNE";
               break;
-            case deg >= 45 && deg <= 66:
+            case deg >= 33.76 && deg <= 56.25:
               deg = "NE";
               break;
-            case deg >= 67 && deg <= 89:
+            case deg >= 56.26 && deg <= 78.75:
               deg = "ENE";
               break;
-            case deg >= 90 && deg <= 111:
+            case deg >= 78.76 && deg <= 101.25:
               deg = "E";
               break;
-            case deg >= 112 && deg <= 134:
+            case deg >= 101.26 && deg <= 123.75:
               deg = "ESE";
               break;
-            case deg >= 135 && deg <= 156:
+            case deg >= 123.76 && deg <= 146.25:
               deg = "SE";
               break;
-            case deg >= 157 && deg <= 179:
+            case deg >= 146.26 && deg <= 168.75:
               deg = "SSE";
               break;
-            case deg >= 180 && deg <= 201:
+            case deg >= 168.76 && deg <= 191.25:
               deg = "S";
               break;
-            case deg >= 202 && deg <= 224:
+            case deg >= 191.26 && deg <= 213.75:
               deg = "SSW";
               break;
-            case deg >= 225 && deg <= 246:
+            case deg >= 213.76 && deg <= 236.25:
               deg = "SW";
               break;
-            case deg >= 247 && deg <= 269:
+            case deg >= 236.26 && deg <= 258.75:
               deg = "WSW";
               break;
-            case deg >= 270 && deg <= 291:
+            case deg >= 258.76 && deg <= 281.25:
               deg = "W";
               break;
-            case deg >= 292 && deg <= 314:
+            case deg >= 281.26 && deg <= 303.75:
               deg = "WNW";
               break;
-            case deg >= 315 && deg <= 336:
+            case deg >= 303.76 && deg <= 326.25:
               deg = "NW";
               break;
-            case deg >= 337 && deg <= 359:
+            case deg >= 326.26 && deg <= 348.75:
               deg = "NNW";
               break;
             default:
