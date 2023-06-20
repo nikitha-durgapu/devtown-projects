@@ -11,6 +11,7 @@ const reportCard = ({
   citycondition,
   citywindspeed,
   citywinddeg,
+  citywinddir,
   weathericon,
   citycountrycode,
 }) => `
@@ -136,7 +137,7 @@ const reportCard = ({
                             </g>
                         </g>
                     </svg>
-                    <h4 class="text-slate-50 font-semibold text-base mx-1">${citywinddeg}<span>&#176</span></h4>
+                    <h4 class="text-slate-50 font-semibold text-base mx-1">${citywinddeg}<span>&#176</span> : ${citywinddir} </h4>
                 </div>
             </div>
         </div>
@@ -148,7 +149,6 @@ class="flex justify-start items-center relative flex-col bg-gradient-to-tl from-
 <h3 class="text-slate-50 font-semibold text-lg mt-3 mx-2"> ${msg} </h3>
 <h4 class="text-gray-50 font-base text-sm mt-3 mx-1"> ${locmsg} </h4>
 <span class="text-slate-100 font-bold text-lg mt-3 mx-3"> "  ${locname} " </span> 
-<h5 class="text-gray-50 font-base text-sm mt-3 mx-1"> ${statuserr} </h5>
 </div>
 `;
 
@@ -168,6 +168,59 @@ const generateReport = async () => {
         } else throw new Error("Status code '" + response.status + "' (Not Found)");
       })
       .then((datadisplay) => {
+        let deg = datadisplay.wind.deg
+        switch (true) {
+            case deg >= 0 && deg <= 21:
+              deg = "N";
+              break;
+            case deg >= 22 && deg <= 44:
+              deg = "NNE";
+              break;
+            case deg >= 45 && deg <= 66:
+              deg = "NE";
+              break;
+            case deg >= 67 && deg <= 89:
+              deg = "ENE";
+              break;
+            case deg >= 90 && deg <= 111:
+              deg = "E";
+              break;
+            case deg >= 112 && deg <= 134:
+              deg = "ESE";
+              break;
+            case deg >= 135 && deg <= 156:
+              deg = "SE";
+              break;
+            case deg >= 157 && deg <= 179:
+              deg = "SSE";
+              break;
+            case deg >= 180 && deg <= 201:
+              deg = "S";
+              break;
+            case deg >= 202 && deg <= 224:
+              deg = "SSW";
+              break;
+            case deg >= 225 && deg <= 246:
+              deg = "SW";
+              break;
+            case deg >= 247 && deg <= 269:
+              deg = "WSW";
+              break;
+            case deg >= 270 && deg <= 291:
+              deg = "W";
+              break;
+            case deg >= 292 && deg <= 314:
+              deg = "WNW";
+              break;
+            case deg >= 315 && deg <= 336:
+              deg = "NW";
+              break;
+            case deg >= 337 && deg <= 359:
+              deg = "NNW";
+              break;
+            default:
+              deg = "no data";
+          }
         const card = document.createElement("div");
         card.innerHTML = reportCard({
           cityname: datadisplay.name,
@@ -175,10 +228,11 @@ const generateReport = async () => {
           cityhumidity: datadisplay.main.humidity,
           citycondition: datadisplay.weather[0].main,
           citywindspeed: datadisplay.wind.speed,
-          citywinddeg: datadisplay.wind.deg,
+          citywinddeg: datadisplay.wind.deg, citywinddir : deg,
           weathericon: datadisplay.weather[0].icon,
           citycountrycode: datadisplay.sys.country,
         });
+        
         console.log(card);
         weatherReport.append(card);
       })
@@ -187,7 +241,6 @@ const generateReport = async () => {
         nocard.innerHTML = errCard({
           msg: "Enter Correct City Name",
           locmsg: "City name does not match any location ",
-          statuserr: err,
           locname: cityName,
         });
         console.log(nocard);
@@ -197,5 +250,8 @@ const generateReport = async () => {
   } catch (error) {
     console.log(error);
   } 
+  
+  
 }
+
 button.addEventListener("click", generateReport);
