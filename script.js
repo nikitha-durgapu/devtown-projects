@@ -154,104 +154,102 @@ class="flex justify-start items-center relative flex-col bg-gradient-to-tl from-
 
 const generateReport = async () => {
   try {
+    button.disabled = true
+    button.textContent = 'Fetching...'
     weatherReport.innerHTML = "";
 
     const cityName = input.value;
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${ApiKey}&units=metric`;
 
     console.log(url);
-
-    fetch(url)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else throw new Error("Status code '" + response.status + "' (Not Found)");
-      })
-      .then((datadisplay) => {
-        let deg = datadisplay.wind.deg
-        switch (true) {
-            case (deg >=348.76  && deg <= 360)||(deg >=0  && deg <= 11.25):
-              deg = "N";
-              break;
-            case deg >= 11.26 && deg <= 33.75:
-              deg = "NNE";
-              break;
-            case deg >= 33.76 && deg <= 56.25:
-              deg = "NE";
-              break;
-            case deg >= 56.26 && deg <= 78.75:
-              deg = "ENE";
-              break;
-            case deg >= 78.76 && deg <= 101.25:
-              deg = "E";
-              break;
-            case deg >= 101.26 && deg <= 123.75:
-              deg = "ESE";
-              break;
-            case deg >= 123.76 && deg <= 146.25:
-              deg = "SE";
-              break;
-            case deg >= 146.26 && deg <= 168.75:
-              deg = "SSE";
-              break;
-            case deg >= 168.76 && deg <= 191.25:
-              deg = "S";
-              break;
-            case deg >= 191.26 && deg <= 213.75:
-              deg = "SSW";
-              break;
-            case deg >= 213.76 && deg <= 236.25:
-              deg = "SW";
-              break;
-            case deg >= 236.26 && deg <= 258.75:
-              deg = "WSW";
-              break;
-            case deg >= 258.76 && deg <= 281.25:
-              deg = "W";
-              break;
-            case deg >= 281.26 && deg <= 303.75:
-              deg = "WNW";
-              break;
-            case deg >= 303.76 && deg <= 326.25:
-              deg = "NW";
-              break;
-            case deg >= 326.26 && deg <= 348.75:
-              deg = "NNW";
-              break;
-            default:
-              deg = "no data";
-          }
-        const card = document.createElement("div");
-        card.innerHTML = reportCard({
-          cityname: datadisplay.name,
-          citytemp: datadisplay.main.temp,
-          cityhumidity: datadisplay.main.humidity,
-          citycondition: datadisplay.weather[0].main,
-          citywindspeed: datadisplay.wind.speed,
-          citywinddeg: datadisplay.wind.deg, citywinddir : deg,
-          weathericon: datadisplay.weather[0].icon,
-          citycountrycode: datadisplay.sys.country,
-        });
-        
-        console.log(card);
-        weatherReport.append(card);
-      })
-      .catch((err) => {
-        const nocard = document.createElement("div");
+const response = await fetch(url)
+var datadisplay = await response.json()
+      let deg = datadisplay.wind.deg
+      switch (true) {
+          case (deg >=348.76  && deg <= 360)||(deg >=0  && deg <= 11.25):
+            deg = "N";
+            break;
+          case deg >= 11.26 && deg <= 33.75:
+            deg = "NNE";
+            break;
+          case deg >= 33.76 && deg <= 56.25:
+            deg = "NE";
+            break;
+          case deg >= 56.26 && deg <= 78.75:
+            deg = "ENE";
+            break;
+          case deg >= 78.76 && deg <= 101.25:
+            deg = "E";
+            break;
+          case deg >= 101.26 && deg <= 123.75:
+            deg = "ESE";
+            break;
+          case deg >= 123.76 && deg <= 146.25:
+            deg = "SE";
+            break;
+          case deg >= 146.26 && deg <= 168.75:
+            deg = "SSE";
+            break;
+          case deg >= 168.76 && deg <= 191.25:
+            deg = "S";
+            break;
+          case deg >= 191.26 && deg <= 213.75:
+            deg = "SSW";
+            break;
+          case deg >= 213.76 && deg <= 236.25:
+            deg = "SW";
+            break;
+          case deg >= 236.26 && deg <= 258.75:
+            deg = "WSW";
+            break;
+          case deg >= 258.76 && deg <= 281.25:
+            deg = "W";
+            break;
+          case deg >= 281.26 && deg <= 303.75:
+            deg = "WNW";
+            break;
+          case deg >= 303.76 && deg <= 326.25:
+            deg = "NW";
+            break;
+          case deg >= 326.26 && deg <= 348.75:
+            deg = "NNW";
+            break;
+          default:
+            deg = "no data";
+        }
+      const card = document.createElement("div");
+      card.innerHTML = reportCard({
+        cityname: datadisplay.name,
+        citytemp: datadisplay.main.temp,
+        cityhumidity: datadisplay.main.humidity,
+        citycondition: datadisplay.weather[0].main,
+        citywindspeed: datadisplay.wind.speed,
+        citywinddeg: datadisplay.wind.deg, citywinddir : deg,
+        weathericon: datadisplay.weather[0].icon,
+        citycountrycode: datadisplay.sys.country,
+      });
+      
+      console.log(card);
+      weatherReport.append(card);
+  } 
+  catch (err) {
+    var name = input.value;
+    const nocard = document.createElement("div");
         nocard.innerHTML = errCard({
           msg: "Enter Correct City Name",
           locmsg: "City name does not match any location ",
-          locname: cityName,
+          locname: name,
         });
         console.log(nocard);
         weatherReport.append(nocard);
         console.log(err);
-      });
-  } catch (error) {
-    console.log(error);
   } 
-  
-  
+finally{
+  button.disabled = false
+  button.textContent = 'Get Report'
+
+}
+
 }
 
 button.addEventListener("click", generateReport);
